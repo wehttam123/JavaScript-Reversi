@@ -40,7 +40,6 @@ render() {
       <h1> JavaScript Reversi </h1>
       <Menu start={this.start} class={this.state.menu} theme={this.state.theme}/>
       <Gameboard class={this.state.game} theme={this.state.theme} user1="Player1" user2="Player2"/>
-      {/*<Win/>*/}
       <div>
         <p>Themes:</p>
         <button className="btn" id="classicbtn" onClick={this.classic}>Classic</button>

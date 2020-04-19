@@ -1,7 +1,7 @@
 import React from 'react';
 import Disc from './Disc';
 
-export default class Gameboard extends React.Component<{ class: string, theme: string, user1: string, user2: string }, { size: number, states: any, player1: string, player2: string, score1: number, score2: number, turn: number, currentTurn: string, ui: string }> {
+export default class Gameboard extends React.Component<{ class: string, theme: string, user1: string, user2: string }, { size: number, states: any, player1: string, player2: string, score1: number, score2: number, winner: string, win: string, indicator: string, turn: number, currentTurn: string }> {
   constructor(props: any) {
     super(props);
 
@@ -29,9 +29,11 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
       player2: "white",
       score1: 2,
       score2: 2,
+      winner: "",
+      win: "inactive",
+      indicator: "active",
       turn: 1,
-      currentTurn: props.user1,
-      ui: "active"
+      currentTurn: props.user1
     };
   }
 
@@ -77,9 +79,20 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
       }
     }
 
-    let ui = "active";
     if (turn === 3) {
-      ui = "inactive";
+      let winner = "";
+      if (this.state.score1 > this.state.score2) {
+        winner = this.props.user1;
+      } else if (this.state.score1 === this.state.score2) {
+        winner = "tie";
+      } else {
+        winner = this.props.user2
+      }
+      this.setState({
+        indicator: "inactive",
+        win: "active",
+        winner: winner
+      });
     }
 
     this.updateScore(updated);
@@ -88,8 +101,7 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
 
     this.setState({
       states: updated,
-      turn: turn,
-      ui: ui
+      turn: turn
     });
   };
 
@@ -391,25 +403,29 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
                 <h2>
                   {"Score:"}
                 </h2>
-                <h3>
-                  {this.props.user1}{": "}{this.state.score1}
-                  {" "}{" "}{" "}{" "}{" "}{" "}{" "}{" "}
-                  {this.props.user2}{": "}{this.state.score2}
-                </h3>
+                  <h3>
+                    {this.props.user1}{": "}{this.state.score1}
+                    {" "}
+                    {this.props.user2}{": "}{this.state.score2}
+                  </h3>
               </td>
               <td>
-                <h2>
+                <h2 className={this.state.indicator}>
                   {"Turn:"}
                 </h2>
-                <h3>
+                <h2 className={this.state.win}>
+                  {"Winner:"}
+                </h2>
+                <h3 className={this.state.indicator}>
                   {this.state.currentTurn}
+                </h3>
+                <h3 className={this.state.win}>
+                  {this.state.winner}
                 </h3>
               </td>
             </tr>
           </table>
         </div>
-        {/*<div className={this.state.win}>
-        </div>*/}
       </div>
     )
   }
