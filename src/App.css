@@ -4,25 +4,24 @@
   font-family: 'Dosis', sans-serif;
 }
 
-
-
 a:link {
   text-decoration: none;
   color: white;
 }
-
 a:visited {
   text-decoration: none;
   color: white;
 }
-
 a:hover {
   text-decoration: underline;
 }
-
 a:active {
   text-decoration: underline;
 } 
+
+code {
+  color:lime;
+}
 
 table {
   table-layout: fixed;
