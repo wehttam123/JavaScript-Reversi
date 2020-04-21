@@ -3,7 +3,9 @@ import './App.css';
 import Menu from './Menu';
 import Gameboard from './Gameboard';
 
-class App extends React.Component <{}, { data: any, menu: string, game: string, theme: string}> {
+var username = "";
+
+class App extends React.Component <{}, { data: any, menu: string, game: string, theme: string, user1: string, user2: string}> {
 
 constructor(props: any) {
   super(props);
@@ -11,25 +13,11 @@ constructor(props: any) {
     data: null,
     menu: "active",
     game: "inactive",
-    theme: "classic"
+    theme: "classic",
+    user1: "Player1",
+    user2: "Player2"
   };
 }
-
-componentDidMount() {
-this.callBackendAPI()
-  .then(res => this.setState({ data: res.express }))
-  .catch(err => console.log(err));
-}
-
-callBackendAPI = async () => {
-const response = await fetch('/');
-const body = await response.json();
-
-if (response.status !== 200) {
-  throw Error(body.message) 
-}
-return body;
-};
 
 start = (data: string) => {
   this.setState({
@@ -38,25 +26,39 @@ start = (data: string) => {
   });
 };
 
+usernames = (user1:string) => {
+  this.setState({
+    user1: user1
+  });
+};
+
+savedTheme = (theme:string) => {
+  this.setState({
+    theme: theme
+  });
+};
+
 classic = () => {
   this.setState({ theme: "classic"});
+  document.cookie = "theme=classic";
 };
 
 modern = () => {
   this.setState({ theme: "modern"});
+  document.cookie = "theme=modern";
 };
 
 contrast = () => {
   this.setState({ theme: "contrast"});
+  document.cookie = "theme=contrast";
 };
 
 render() {
-
   return (
     <div className="App">
       <h1> JavaScript Reversi </h1>
-      <Menu start={this.start} class={this.state.menu} theme={this.state.theme}/>
-      <Gameboard class={this.state.game} theme={this.state.theme} user1="Player1" user2="Player2"/>
+      <Menu start={this.start} usernames={this.usernames} savedTheme={this.savedTheme} class={this.state.menu} theme={this.state.theme} />
+      <Gameboard class={this.state.game} theme={this.state.theme} user1={this.state.user1} user2={this.state.user2}/>
       <div>
         <p>Themes:</p>
         <button className="btn" id="classicbtn" onClick={this.classic}>Classic</button>
