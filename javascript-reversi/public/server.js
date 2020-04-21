@@ -1,8 +1,8 @@
-var express = require('express');
-var app = express();
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var port = process.env.PORT || 5000;
+const express = require('express');
+const app = express();
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+const port = process.env.PORT || 5000;
 
 app.use(express.static(__dirname));
 
@@ -12,15 +12,20 @@ app.get('/', function(req, res){
   res.sendFile(path.join(__dirname+'/index.html'));
 });
 
+var gamecodes = [];
+
 io.on('connection', function(socket){
-
-  //let username = getCookie();
-
   console.log("user connected.");
 
-  //socket.emit('user connected', username);
+  let gamecode = Math.floor(Math.random() * (10000000000 - 1000000000) ) + 1000000000;
+  while (gamecodes.find(e => e === gamecode)) {
+    gamecode = Math.floor(Math.random() * (10000000000 - 1000000000) ) + 1000000000;
+  }
+  gamecodes.push(gamecode);
+  socket.emit('gamecode', gamecode);
   
   socket.on('disconnect', () => {
+    gamecodes = gamecodes.filter(e => e !== gamecode);
     console.log("user disconnected");
   })
 });

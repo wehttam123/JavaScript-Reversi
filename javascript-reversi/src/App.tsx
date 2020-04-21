@@ -3,8 +3,6 @@ import './App.css';
 import Menu from './Menu';
 import Gameboard from './Gameboard';
 
-var username = "";
-
 class App extends React.Component <{}, { data: any, menu: string, game: string, theme: string, user1: string, user2: string}> {
 
 constructor(props: any) {

@@ -1,14 +1,15 @@
 import React from 'react';
 import socketIOClient from 'socket.io-client'
 
-export default class Menu extends React.Component <{ start: any, usernames: any, savedTheme: any, class: string, theme: string }, { username: string, theme: string }> {
+export default class Menu extends React.Component <{ start: any, usernames: any, savedTheme: any, class: string, theme: string }, { username: string, theme: string, gamecode: number }> {
    
     constructor(props: any) {
         super(props);
 
         this.state = { 
-            username: "",
-            theme: "classic"
+            username: "User1",
+            theme: "classic",
+            gamecode: 1234567890
         };
     }
 
@@ -43,10 +44,9 @@ export default class Menu extends React.Component <{ start: any, usernames: any,
         });
           
         const socket = socketIOClient("localhost:5000");
-        /*socket.on('user connected', (username: string) => {
-            console.log("got it");
-            console.log(username);
-        })*/
+        socket.on('gamecode', (gamecode: number) => {
+            this.setState({gamecode: gamecode});
+        })
     }
     
     render() {
@@ -62,7 +62,7 @@ export default class Menu extends React.Component <{ start: any, usernames: any,
                     </button>
                     </tr>
                     <tr>
-                    <h2>Gamecode: 12345</h2>
+                    <h2>Gamecode: <code>{this.state.gamecode}</code></h2>
                     <p>To start a new game, give this game code to your opponent. If they enter it below and press join game, the game will start. </p>
                     <input></input>
                     <button className="btn" id={this.props.theme+"btn"} onClick={this.start}>
