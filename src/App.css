@@ -1,0 +1,217 @@
+.App {
+  text-align: center;
+  color: white;
+  font-family: 'Dosis', sans-serif;
+}
+
+a:link {
+  text-decoration: none;
+  color: white;
+}
+a:visited {
+  text-decoration: none;
+  color: white;
+}
+a:hover {
+  text-decoration: underline;
+}
+a:active {
+  text-decoration: underline;
+} 
+
+code {
+  color:lime;
+}
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  max-width: 569px;
+}
+
+table, th, td {
+  border-collapse: collapse;
+  border: 2px solid black;
+  margin-left:auto; 
+  margin-right:auto;
+  padding: 0px;
+  border-radius:3px;
+  -moz-border-radius:3px;
+}
+
+.menu {
+  height: 687px;
+} 
+
+.inactive {
+ display: none;
+}
+
+.active {
+  visibility: visible;
+}
+
+.box {
+  position: relative;
+  max-width: 70px;
+  max-height: 70px;
+  width: 100%;
+  padding-top: 100%;  
+}
+
+input {
+  font-family: 'Dosis', sans-serif;
+  font-size: medium;
+  width: 50%;
+  margin: 10px;
+  padding: 3px;
+  background-color: lightgrey;
+  border-radius:5px;
+  -moz-border-radius:3px;
+}
+
+.square {
+  padding-left: 13%;
+  padding-right: 13%;
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  max-width: 70px;
+  width: 100%;
+  border: none;
+  border-radius:3px;
+  -moz-border-radius:3px;
+}
+
+#squareclassic {
+  background-color: seagreen;
+}
+
+#squaremodern {
+  background-color: teal;
+}
+
+#squarecontrast {
+  background-color: white;
+}
+
+.btn {
+  display: inline-block;
+  box-shadow: 1px 1px 2px black;
+  border: none;
+  border-radius:3px;
+  padding: 7px 20px;
+  margin: 2px;
+  text-decoration: none;
+  font-family: 'Dosis', sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background 250ms ease-in-out, transform 150ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+.btn:hover,
+.btn:focus {
+    background-color: grey;
+}
+.btn:focus {
+    outline: 1px solid #fff;
+    outline-offset: -4px;
+}
+.btn:active {
+    transform: scale(0.90);
+}
+
+#classicbtn {
+  color: #ffffff;
+  background-color: seagreen;
+}
+
+#modernbtn {
+  color: goldenrod;
+  background-color: teal;
+}
+
+#contrastbtn {
+  color: #ffffff;
+  background-color: black;
+}
+
+button::-moz-focus-inner {
+  border: 0;
+}
+
+.black {
+  max-width: 50px;
+  height: 70%;
+  max-height: 50px;
+  background: black;
+  border-radius: 50%;
+  margin-left:auto; 
+  margin-right:auto;
+}
+#blackclassic {
+  background: black;
+}
+#blackmodern {
+  background: darkmagenta;
+}
+#blackcontrast {
+  background:black;
+}
+
+.white {
+  max-width: 50px;
+  height: 70%;
+  max-height: 50px;
+  border-radius: 50%;
+  margin-left:auto; 
+  margin-right:auto;
+}
+#whiteclassic {
+  background: white;
+}
+#whitemodern {
+  background: orange;
+}
+#whitecontrast {
+  background:grey;
+}
+
+.blank {
+  max-width: 50px;
+  height: 70%;
+  max-height: 50px;
+  margin-left:auto; 
+  margin-right:auto;
+}
+
+.possible {
+  max-width: 50px;
+  height: 70%;
+  max-height: 50px;
+  border-radius: 50%;
+  border-style: solid;
+  border-width: 2px;
+  margin-left:auto; 
+  margin-right:auto;
+}
+#possibleclassic {
+  border-color: black;
+}
+#possiblemodern {
+  border-color: darkslategray;
+}
+#possiblecontrast {
+  border-color:black;
+}
+
+* { 
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+  box-sizing: border-box;         /* Opera/IE 8+ */
+}
