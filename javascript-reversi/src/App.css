@@ -28,7 +28,6 @@ table {
   width: 100%;
   max-width: 569px;
 }
-
 table, th, td {
   border-collapse: collapse;
   border: 2px solid black;
@@ -42,11 +41,9 @@ table, th, td {
 .menu {
   height: 687px;
 } 
-
 .inactive {
  display: none;
 }
-
 .active {
   visibility: visible;
 }
@@ -89,11 +86,9 @@ input {
 #squareclassic {
   background-color: seagreen;
 }
-
 #squaremodern {
   background-color: teal;
 }
-
 #squarecontrast {
   background-color: white;
 }
@@ -130,12 +125,10 @@ input {
   color: #ffffff;
   background-color: seagreen;
 }
-
 #modernbtn {
   color: goldenrod;
   background-color: teal;
 }
-
 #contrastbtn {
   color: #ffffff;
   background-color: black;
@@ -211,7 +204,7 @@ button::-moz-focus-inner {
 }
 
 * { 
-  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-  box-sizing: border-box;         /* Opera/IE 8+ */
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box; 
+  box-sizing: border-box;    
 }

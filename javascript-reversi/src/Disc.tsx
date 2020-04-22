@@ -1,7 +1,7 @@
 import React from 'react';
 
-export default class Disc extends React.Component <{ theme: string, update: any, value: string, row: number, col: number }, { row: number, col: number }> {
-   
+export default class Disc extends React.Component<{ theme: string, update: any, value: string, row: number, col: number }, { row: number, col: number }> {
+
     constructor(props: any) {
         super(props);
         let row = props.row;
@@ -15,7 +15,7 @@ export default class Disc extends React.Component <{ theme: string, update: any,
 
     update = () => {
         this.props.update(this.state);
-      };
+    };
 
     render() {
         return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import Disc from './Disc';
 
-export default class Gameboard extends React.Component<{ class: string, theme: string, user1: string, user2: string }, { size: number, states: any, player1: string, player2: string, score1: number, score2: number, winner: string, win: string, indicator: string, turn: number, currentTurn: string }> {
+export default class Gameboard extends React.Component<{ class: string, theme: string, user1: string, user2: string, type: string, input: string, enable: any, room: any, socket: any }, { size: number, states: any, player1: string, player2: string, score1: number, score2: number, winner: string, win: string, indicator: string, turn: number, currentTurn: string, render: boolean }> {
   constructor(props: any) {
     super(props);
 
@@ -33,8 +33,44 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
       win: "inactive",
       indicator: "active",
       turn: 1,
-      currentTurn: props.user1
+      currentTurn: props.user1,
+      render: true
     };
+  }
+
+  componentDidUpdate = () => {
+    if (this.props.input === "disable") {
+      let states = this.state.states;
+      states = this.clearPossible(states);
+      this.props.enable();
+    }
+  }
+
+  componentDidMount = () => {
+    this.props.socket.on('network state', (state: any) => {
+      this.setState({
+        states: state.states,
+        player1: state.player1,
+        player2: state.player2,
+        score1: state.score1,
+        score2: state.score2,
+        winner: state.winner,
+        win: state.win,
+        indicator: state.indicator,
+        turn: state.turn,
+        currentTurn: state.currentTurn,
+        render: true
+      }, () => {
+        this.props.socket.emit('clear', this.props.room);
+      });
+    });
+
+    this.props.socket.on('clear', () => {
+      let clear = this.state.states;
+      clear = this.clearPossible(clear);
+      this.setState({ states: clear }, () => {
+      });
+    });
   }
 
   update = (data: any) => {
@@ -45,64 +81,72 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
     let updated = this.state.states;
     let turn = this.state.turn;
 
-    if (this.state.states[row][col] === "possible") {
-      if (turn === 1) {
-        updated[row][col] = player;
-        updated = this.flipDiscs(updated, row, col, player, opponent);
-        updated = this.clearPossible(updated, row, col);
-        updated = this.findPossible(updated, opponent, player);
-        if (this.checkPossible(updated)) {
-            turn = 2;
-        } else {
-          updated = this.findPossible(updated, player, opponent);
-          if (this.checkPossible(updated)) {
-            turn = 1;
-          } else {
-            turn = 3;
-          }
-        }
-      } else if (turn === 2) {
-        updated[row][col] = opponent;
-        updated = this.flipDiscs(updated, row, col, opponent, player);
-        updated = this.clearPossible(updated, row, col);
-        updated = this.findPossible(updated, player, opponent);
-        if (this.checkPossible(updated)) {
-            turn = 1;
-        } else {
+    if (this.state.render === true) {
+
+      if (this.state.states[row][col] === "possible") {
+        if (turn === 1) {
+          updated[row][col] = player;
+          updated = this.flipDiscs(updated, row, col, player, opponent);
+          updated = this.clearPossible(updated);
           updated = this.findPossible(updated, opponent, player);
           if (this.checkPossible(updated)) {
             turn = 2;
           } else {
-            turn = 3;
+            updated = this.findPossible(updated, player, opponent);
+            if (this.checkPossible(updated)) {
+              turn = 1;
+            } else {
+              turn = 3;
+            }
+          }
+        } else if (turn === 2) {
+          updated[row][col] = opponent;
+          updated = this.flipDiscs(updated, row, col, opponent, player);
+          updated = this.clearPossible(updated);
+          updated = this.findPossible(updated, player, opponent);
+          if (this.checkPossible(updated)) {
+            turn = 1;
+          } else {
+            updated = this.findPossible(updated, opponent, player);
+            if (this.checkPossible(updated)) {
+              turn = 2;
+            } else {
+              turn = 3;
+            }
           }
         }
       }
-    }
 
-    if (turn === 3) {
-      let winner = "";
-      if (this.state.score1 > this.state.score2) {
-        winner = this.props.user1;
-      } else if (this.state.score1 === this.state.score2) {
-        winner = "tie";
-      } else {
-        winner = this.props.user2
+      if (turn === 3) {
+        let winner = "";
+        if (this.state.score1 > this.state.score2) {
+          winner = this.props.user1;
+        } else if (this.state.score1 === this.state.score2) {
+          winner = "tie";
+        } else {
+          winner = this.props.user2
+        }
+        this.setState({
+          indicator: "inactive",
+          win: "active",
+          winner: winner
+        });
       }
+
+      this.updateScore(updated);
+
+      this.updateTurn(turn);
+
       this.setState({
-        indicator: "inactive",
-        win: "active",
-        winner: winner
+        states: updated,
+        turn: turn,
+        render: false
+      }, () => {
+        if (this.props.type === "network") {
+          this.props.socket.emit('update room', this.props.room, this.state);
+        }
       });
     }
-
-    this.updateScore(updated);
-    
-    this.updateTurn(turn);
-
-    this.setState({
-      states: updated,
-      turn: turn
-    });
   };
 
   flipDiscs = (board: any, row: number, col: number, player: string, opponent: string) => {
@@ -261,7 +305,7 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
     return board;
   }
 
-  clearPossible = (board: any, row: number, col: number) => {
+  clearPossible = (board: any) => {
     for (let r = 0; r < this.state.size; r++) {
       for (let c = 0; c < this.state.size; c++) {
         if (board[r][c] === "possible") {
@@ -403,11 +447,11 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
                 <h2>
                   {"Score:"}
                 </h2>
-                  <h3>
-                    {this.props.user1}{": "}{this.state.score1}
-                    {" "}
-                    {this.props.user2}{": "}{this.state.score2}
-                  </h3>
+                <h3>
+                  {this.props.user1}{": "}{this.state.score1}
+                  {" "}
+                  {this.props.user2}{": "}{this.state.score2}
+                </h3>
               </td>
               <td>
                 <h2 className={this.state.indicator}>

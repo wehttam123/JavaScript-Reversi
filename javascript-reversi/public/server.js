@@ -15,7 +15,7 @@ app.get('/', function(req, res){
 var gamecodes = [];
 
 io.on('connection', function(socket){
-  console.log("user connected.");
+  console.log("user " + socket.id + " connected.");
 
   let gamecode = Math.floor(Math.random() * (10000000000 - 1000000000) ) + 1000000000;
   while (gamecodes.find(e => e === gamecode)) {
@@ -23,10 +23,30 @@ io.on('connection', function(socket){
   }
   gamecodes.push(gamecode);
   socket.emit('gamecode', gamecode);
+
+  socket.join(gamecode);
+
+  socket.on('join room', (room, user) => {
+    socket.join(room);
+    console.log("user " + socket.id + " joined room " + room);
+    socket.to(room).emit('joined', room, user);
+  })
+
+  socket.on('set username', (room, user) => {
+    io.in(room).emit('set username', user);
+  })
+
+  socket.on('update room', (room, state) => {
+    socket.to(room).emit('network state', state);
+  })
+
+  socket.on('clear', (room, state) => {
+    socket.to(room).emit('clear');
+  })
   
   socket.on('disconnect', () => {
     gamecodes = gamecodes.filter(e => e !== gamecode);
-    console.log("user disconnected");
+    console.log("user " + socket.id + " disconnected");
   })
 });
 
