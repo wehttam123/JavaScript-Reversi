@@ -4,8 +4,8 @@ import Menu from './Menu';
 import Gameboard from './Gameboard';
 import socketIOClient from 'socket.io-client'
 
-//const socket = socketIOClient("localhost:5000");
-const socket = socketIOClient(window.location.hostname);
+const socket = socketIOClient("localhost:5000");
+//const socket = socketIOClient(window.location.host);
 
 class App extends React.Component <{}, { data: any, menu: string, game: string, theme: string, user1: string, user2: string, type: string, input: string, room: string}> {
 
