@@ -13,6 +13,7 @@ app.get('/', function(req, res){
 });
 
 var gamecodes = [];
+var rooms = [];
 
 io.on('connection', function(socket){
   console.log("user " + socket.id + " connected.");
@@ -42,6 +43,15 @@ io.on('connection', function(socket){
 
   socket.on('clear', (room, state) => {
     socket.to(room).emit('clear');
+  })
+
+  socket.on('random', (room) => {
+    if (rooms.length === 0){
+      rooms.push(room);
+    } else {
+      socket.emit('join', rooms[0]);
+      rooms = rooms.filter(e => e !== rooms[0]);
+    }
   })
   
   socket.on('disconnect', () => {

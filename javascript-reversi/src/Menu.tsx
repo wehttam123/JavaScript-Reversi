@@ -17,11 +17,20 @@ export default class Menu extends React.Component<{ start: any, join: any, joine
         this.props.start("active");
     };
 
+    random = () => {
+        this.props.socket.emit('random', this.state.gamecode);
+    };
+
     join = () => {
         if (this.state.room > 0) {
             this.props.socket.emit('join room', this.state.room, this.state.username);
             this.props.join(this.state.username, this.state.room);
         }
+    };
+
+    joinRandom = (room: any) => {
+            this.props.socket.emit('join room', room, this.state.username);
+            this.props.join(this.state.username, room);
     };
 
     usernames = () => {
@@ -63,6 +72,10 @@ export default class Menu extends React.Component<{ start: any, join: any, joine
             this.props.joined(user, room);
         });
 
+        this.props.socket.on('join', (room: any) => {
+            this.joinRandom(room);
+        });
+
         this.props.socket.on('set username', (user: string) => {
             this.props.setUsername(user);
         });
@@ -92,7 +105,7 @@ export default class Menu extends React.Component<{ start: any, join: any, joine
                             Start local game
                     </button>
                     </tr>
-                    <button className="btn" id={this.props.theme + "btn"} onClick={this.start}>
+                    <button className="btn" id={this.props.theme + "btn"} onClick={this.random}>
                         Start random game
                     </button>
                 </table>
