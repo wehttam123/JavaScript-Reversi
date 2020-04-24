@@ -137,15 +137,21 @@ export default class Gameboard extends React.Component<{ class: string, theme: s
 
       this.updateTurn(turn);
 
-      this.setState({
-        states: updated,
-        turn: turn,
-        render: false
-      }, () => {
-        if (this.props.type === "network") {
+      if (this.props.type === "network") {
+        this.setState({
+          states: updated,
+          turn: turn,
+          render: false
+        }, () => {
           this.props.socket.emit('update room', this.props.room, this.state);
-        }
-      });
+        });
+      } else {
+        this.setState({
+          states: updated,
+          turn: turn,
+          render: true
+        });
+      }
     }
   };
 
